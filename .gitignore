@@ -1,2 +1,4 @@
 /src/c/main.exe
 /src/cpp/main.exe
+/src/rs/cargo.lock
+/src/rs/target
