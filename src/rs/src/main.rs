@@ -27,7 +27,12 @@ fn main() {
     let c0 = Complex64::new(1.0, 0.0);
     let c1 = Complex64::new(0.0, 1.0);
     let mut q = Qubit{C0: c0, C1: c1};
-    println!("First Qubit: {:?}", q);
+    println!("First {:?}", q);
     q = new_qubit(c1, c0);
-    println!("Second Qubit: {:?}", q);
+    println!("Second {:?}", q);
+    let c2 = Complex64::new(0.0, 0.0);
+    q = new_qubit(c0, c2);
+    println!("Third {:?}", q);
+    q = new_qubit(c2, c0);
+    println!("Fourth {:?}", q);
 }
