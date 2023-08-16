@@ -4,6 +4,8 @@ import (
     "fmt"
     "math"
     "math/cmplx"
+    "math/rand"
+    "time"
 )
 
 type Qubit struct {
@@ -19,13 +21,48 @@ func newQubit(c0, c1 complex128) (*Qubit, error) {
     return nil, fmt.Errorf("Invalid complex numbers to contruct Qubit")
 }
 
+func getObservation() float64 {
+    rand.Seed(time.Now().UnixNano())
+    return rand.Float64()
+}
+
+func measure(q *Qubit) int {
+    if real(q.C0) == 1 && imag(q.C0) == 0 && real(q.C1) == 0 && imag(q.C1) == 0 {
+        return 0
+    } else if real(q.C0) == 0 && imag(q.C0) == 0 && real(q.C1) == 1 && imag(q.C1) == 0 {
+        return 1
+    }
+    observation := getObservation()
+    prob0 := cmplx.Abs(q.C0)*cmplx.Abs(q.C0)
+    prob1 := cmplx.Abs(q.C1)*cmplx.Abs(q.C1)
+    if prob0 == prob1 {
+        return int(observation)
+    } else {
+        largerProb := math.Max(prob0, prob1)
+        if largerProb == prob0 && prob1 < observation {
+            return 0
+        } else if largerProb == prob1 && prob0 < observation {
+            return 1
+        }
+    }
+    return -1
+}
+
+func qubitToString(q *Qubit) {
+    fmt.Printf("\n[{%f + %fi}, {%f + %fi]\n", real(q.C0), imag(q.C0), real(q.C1), imag(q.C1))
+}
+
 func main() {
-    c0 := complex(1.0, 0.0)
-    c1 := complex(0.0, 0.0)
-    qubit, err := newQubit(c0, c1)
+    c0 := complex(0.0, 0.0)
+    c1 := complex(0.0, 1.0)
+    q, err := newQubit(c0, c1)
     if err != nil {
         fmt.Println("Error: ", err)
         return
     }
-    fmt.Printf("Qubit: C0 = %f + %fi, C1 = %f + %fi\n", real(qubit.C0), imag(qubit.C0), real(qubit.C1), imag(qubit.C1))
+    observation := getObservation()
+    fmt.Println(observation)
+    measurement := measure(q)
+    fmt.Println(measurement)
+    qubitToString(q)
 }
