@@ -4,7 +4,7 @@ int main()
 {
     Qubit q0 = singletonQubit(std::complex<float>(0.f, 0.5f), std::complex<float>(0.f, 0.5f));
     q0.toString();
-    for (int i = 0; i < 10; i++){
+    for (size_t i = 0; i < 10; i++){
         printf("\nSingleton Qubit Measurement %d: %d", i+1, q0.measure());
     }
     printf("\n");
@@ -15,7 +15,7 @@ int main()
     qbits.push_back(q2);
     QuantumRegister qr = QuantumRegister(qbits);
     qr.toString();
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
         printf("\nQuantum Register Measurement %d: %d", i+1, qr.measure());
     }
     qbits.clear();
@@ -28,7 +28,7 @@ int main()
     qbits.push_back(q5);
     qr = QuantumRegister(qbits);
     qr.toString();
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
         printf("\nQuantum Register Measurement %d: %d", i+1, qr.measure());
     }
     qbits.clear();

@@ -18,12 +18,12 @@ int main() {
     Qubit q = singletonQubit(z, w);
     qubitToString(q);
     printf("\n\nRNG Result: %f\n", genRandom());
-    for (int i = 0; i < 10; i++) {
+    for (size_t i = 0; i < 10; i++) {
         printf("\nSingleton Qubit Measurement %d: %d", i+1, measure(q));
     }
     float* coords = bloch_coordinates(q);
     printf("\n\nBloch Coordinates of Qubit: [");
-    for (int i = 0; i < 3; i++) {
+    for (size_t i = 0; i < 3; i++) {
         printf("%f", coords[i]);
         if (i < 2) {
             printf(", ");
@@ -38,7 +38,7 @@ int main() {
     Qubit* registerQubits0[2] = {&s, &t};
     QuantumRegister qRegister0 = newQuantumRegister(registerQubits0, 2);
     qRegisterToString(qRegister0);
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
         printf("\nQuantum Register Measurement %d: %d", i+1, measureRegister(qRegister0));
     }
     free(qRegister0.qubits);
