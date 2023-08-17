@@ -8,14 +8,14 @@ def validateRegister(qbits):
 
 class qRegister:
     def __init__(self, qbits):
-        if validateRegister(qbits):
+        if not validateRegister(qbits):
             raise Exception(f"-> Qubits not valid to form a Quantum Register.")
         self.qubits = qbits
         self.n_qubits = len(qbits)
         self.n_states = 2**self.n_qubits
 
 if __name__ == "__main__":
-    register = qRegister([qubit(1/np.sqrt(2), -1/np.sqrt(2)), qubit(-1/np.sqrt(2), 1/np.sqrt(2))])
+    register = qRegister([qubit(1/np.sqrt(4), -1/np.sqrt(4)), qubit(-1/np.sqrt(4), 1/np.sqrt(4))])
     for i in range(0, len(register.qubits)):
         prob0 = round(abs(register.qubits[i].c0)**2, 2)
         prob1 = round(abs(register.qubits[i].c1)**2, 2)
