@@ -78,7 +78,7 @@ bool validateQubit(Qubit q) {
     }
 }
 
-Qubit newQubit(Complex c0, Complex c1) {
+Qubit singletonQubit(Complex c0, Complex c1) {
     Qubit qbit = {c0, c1};
     if (!validateQubit(qbit)) {
         qbit.C0.real = 0;
@@ -197,5 +197,9 @@ QuantumRegister newQuantumRegister(Qubit** qubitArr, size_t arrSize) {
 }
 
 void qRegisterToString(QuantumRegister r) {
-
+    printf("\n~\n");
+    for (size_t i = 0; i < r.n_qubits; i++) {
+        printf("[{%f + %fi}, {%f + %fi}]\n", r.qubits[i].C0.real, r.qubits[i].C0.imag, r.qubits[i].C1.real, r.qubits[i].C1.imag);
+    }
+    printf("~\n");
 }
