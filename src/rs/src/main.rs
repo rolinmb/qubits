@@ -1,4 +1,17 @@
 use num_complex::Complex64;
+use std::thread;
+use std::time::Duration;
+use std::time::{SystemTime, UNIX_EPOCH};
+use rand::{Rng, SeedableRng};
+
+fn get_random_float() -> f64 {
+    let nanoseconds = Duration::new(0, 1);
+    thread::sleep(nanoseconds);
+    let current_time = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards").as_nanos();
+    let seed = current_time as u64;
+    let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
+    return rng.gen();
+}
 
 #[derive(Debug)]
 struct Qubit {
@@ -21,6 +34,31 @@ fn singleton_qubit(cmp0: Complex64, cmp1: Complex64) -> Qubit {
         qbit.c1 = Complex64::new(0.0, 0.0);
     }
     return qbit;
+}
+
+fn measure_qubit(q: &Qubit) -> i32 {
+    if q.c0.re == 1 as f64 && q.c0.im == 0 as f64 && q.c1.re == 0 as f64 && q.c1.im == 0 as f64 {
+        return 0;
+    } else if q.c0.re == 0 as f64 && q.c0.im == 0 as f64 && q.c1.re == 1 as f64 && q.c1.im == 0 as f64 {
+        return 1;
+    }
+    let observation = get_random_float();
+    let prob0 = q.c0.norm()*q.c0.norm();
+    let prob1 = q.c1.norm()*q.c1.norm();
+    if (prob0 == 1 as f64 && prob0 == prob1) || (prob0 == 0 as f64 &&  prob0 == prob1) {
+        return -1;
+    }
+    if prob0 == prob1 {
+        return f64::round(observation) as i32;
+    } else {
+        let larger_prob = if prob0 > prob1 { prob0 } else { prob1 };
+        if larger_prob == prob0 && prob1 < observation {
+            return 0;
+        } else if larger_prob == prob1 && prob0 < observation {
+            return 1;
+        }
+    }
+    return -1;
 }
 
 #[derive(Debug)]
@@ -47,21 +85,30 @@ fn new_qregister(qbits: Vec<Qubit>) -> QuantumRegister {
 fn main() {
     let cmp0 = Complex64::new(1.0, 0.0);
     let cmp1 = Complex64::new(0.0, 1.0);
-    let mut q0 = Qubit{c0: cmp0, c1: cmp1};
-    println!("First {:?}", q0);
-    q0 = singleton_qubit(cmp1, cmp0);
-    println!("Second {:?}", q0);
-    let cmp2 = Complex64::new(0.0, 0.0);
+    let mut q0 = Qubit{c0: cmp0, c1: cmp1}; // Invalid
+    println!("\nFirst {:?}", q0);
+    println!("First Qubit Measurement: {}", measure_qubit(&q0));
+    q0 = singleton_qubit(cmp1, cmp0); // Invalid
+    println!("\nSecond {:?}", q0);
+    println!("Second Qubit Measurement: {}", measure_qubit(&q0));
+    let cmp2 = Complex64::new(0.0, 0.0); // Always 0
     q0 = singleton_qubit(cmp0, cmp2);
-    println!("Third {:?}", q0);
-    q0 = singleton_qubit(cmp2, cmp0);
-    println!("Fourth {:?}", q0);
+    println!("\nThird {:?}", q0);
+    println!("Third Qubit Measurement: {}", measure_qubit(&q0));
+    q0 = singleton_qubit(cmp2, cmp0); // Always 1
+    println!("\nFourth {:?}", q0);
+    println!("Fourth Qbuit Measurement: {}", measure_qubit(&q0));
     let cmp3 = Complex64::new(0.5, 0.0);
     let cmp4 = Complex64::new(0.0, -0.5);
+    q0 = singleton_qubit(cmp3, cmp4); // 50/50 Chance to be 0 or 1
+    println!("\nFifth {:?}", q0);
+    for i in 0..10 {
+        println!("Fifth Qubit Measurement {}: {}", i+1, measure_qubit(&q0));
+    }
     let qbits: Vec<Qubit> = vec![
-        Qubit {c0: cmp3, c1: cmp4},
+        q0,
         Qubit {c0: cmp4, c1: cmp3}
     ];
     let qr = new_qregister(qbits);
-    println!("{:?}", qr)
+    println!("\n{:?}", qr)
 }
