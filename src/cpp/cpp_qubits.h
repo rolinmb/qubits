@@ -3,7 +3,7 @@
 #include <vector>
 #include <Windows.h>
 
-float genRandom() {
+void seedRandom() {
     LARGE_INTEGER performanceCount;
     FILETIME systemTime;
     ULONGLONG combinedTime;
@@ -12,6 +12,10 @@ float genRandom() {
     combinedTime = ((ULONGLONG)systemTime.dwHighDateTime << 32) + systemTime.dwLowDateTime + performanceCount.QuadPart;
     srand((unsigned int)combinedTime);
     Sleep(1);
+}
+
+float genRandom() {
+    seedRandom();
     return (float)rand() / RAND_MAX;
 }   
 
@@ -59,7 +63,7 @@ public:
 
     void toString()
     {
-        printf("\n[{%f + %fi}, {%f + %fi}]", this->C0.real(), this->C0.imag(), this->C1.real(), this->C1.imag());
+        printf("\n[{%f + %fi}, {%f + %fi}]\n", this->C0.real(), this->C0.imag(), this->C1.real(), this->C1.imag());
     }
 };
 
@@ -86,6 +90,47 @@ public:
         {
             throw std::invalid_argument("Invalid Qubits vector, cannot form QuantumRegister");
         } 
+    }
+
+    int measure() {
+        bool equalProbs = true;
+        float* probs = (float*)malloc(this->qubits.size() * sizeof(float));
+        if (probs == NULL) {
+            perror("Memory allocation failed in QuantumRegister.measure()");
+            exit(EXIT_FAILURE);
+        }
+        float probSum = 0.f;
+        for (size_t i = 0; i < this->qubits.size(); i++) {
+            probs[i] = abs(this->qubits[i].C0)*abs(this->qubits[i].C0) + abs(this->qubits[i].C1)*abs(this->qubits[i].C1);
+            probSum += probs[i];
+        }
+        if (round(probSum) != 1) { // Re-validate; A QuantumRegister has a probability sum == 1
+            perror("Cannot measure an invalid QuantumRegister (probabilities sum != 1)");
+            exit(EXIT_FAILURE);
+        }
+        for (size_t i = 1; i < this->qubits.size(); i++) { // Check for equal probability states
+            if (probs[i] != probs[0]) {
+                equalProbs = false;
+                break;
+            }
+        }
+        if (equalProbs) {
+            free(probs);
+            seedRandom();
+            return rand() % (int)pow(2, this->qubits.size()); // 2^n_qubits possible states
+        } else {
+            float observation = round(probSum) * genRandom();
+            float accumProb = 0.f;
+            for (int i = 0; i < this->qubits.size(); i++) {
+                accumProb += probs[i];
+                if (observation <= accumProb) {
+                    free(probs);
+                    return i;
+                }
+            }
+        }
+        free(probs);
+        return -1;
     }
 
     void toString()

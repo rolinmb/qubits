@@ -202,7 +202,7 @@ QuantumRegister newQuantumRegister(Qubit** qubitArr, size_t arrSize) {
 
 int measureRegister(QuantumRegister qr) {
     bool equalProbs = true;
-    float* probs = (float *)malloc(qr.n_qubits * sizeof(float));
+    float* probs = (float*)malloc(qr.n_qubits * sizeof(float));
     if (probs == NULL) {
         perror("Memory allocation failed in measureRegister");
         exit(EXIT_FAILURE);
