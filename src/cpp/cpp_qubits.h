@@ -23,14 +23,8 @@ public:
 
     Qubit(std::complex<float> c0, std::complex<float> c1)
     {
-        if (round(abs(c0)*abs(c0) + abs(c1)*abs(c1)) == 1)
-        {
-            C0 = c0;
-            C1 = c1;
-        }
-        else {
-            throw std::invalid_argument("Invalid complex number parameters to construct Qubit.");
-        }
+        C0 = c0;
+        C1 = c1;
     }
 
     int measure() {
