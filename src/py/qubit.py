@@ -4,9 +4,6 @@ import cmath
 
 class qubit:
     def __init__(self, c0, c1):
-        #print(f"Qubit constructor called with parameters [{round(c0, 5)} & {round(c1, 5)}] => Sum of Probabilities: {int(round(abs(c0)**2 + abs(c1)**2, 0))}")
-        if int(round(abs(c0)**2 + abs(c1)**2, 0)) != 1:
-            raise Exception(f"-> Invalid qubit constructor parameters {c0} & {c1}")
         self.c0 = c0
         self.c1 = c1
 
@@ -104,5 +101,13 @@ class qubit:
     def __repr__(self):
         return f"[[{round(self.c0.real, 5)}, {round(self.c0.imag, 5)}]; [{round(self.c1.real, 5)}, {round(self.c1.imag, 5)}]]"
     
+def singleton_qubit(complex0, complex1):
+    if int(round(abs(complex0)**2 + abs(complex1)**2, 0)) != 1:
+            raise Exception(f"-> Invalid singleton qubit parameters {complex0} & {complex1}")
+    return qubit(complex0, complex1)
+
 if __name__ == "__main__":
-    pass
+    q0 = singleton_qubit(complex(-1/np.sqrt(2), 0), complex(0, 1/np.sqrt(2)))
+    print(q0)
+    for i in range(0, 10):
+        print(q0.measure())
