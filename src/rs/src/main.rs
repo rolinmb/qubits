@@ -90,7 +90,7 @@ fn new_qregister(qbits: Vec<Qubit>) -> QuantumRegister {
     }
 }
 
-fn measure_register(qr: &QuantumRegister) -> i32 {
+fn measure_qregister(qr: &QuantumRegister) -> i32 {
     let mut equal_probs = true;
     let mut probs = vec![0 as f64, qr.qubits.len() as f64];
     let mut prob_sum: f64 = 0.0;
@@ -145,13 +145,28 @@ fn main() {
     for i in 0..10 {
         println!("Fifth Qubit Measurement # {}: {}", i+1, measure_qubit(&q0));
     }
-    let qbits: Vec<Qubit> = vec![
+    let qbits0: Vec<Qubit> = vec![
         q0,
         Qubit {c0: cmp4, c1: cmp3}
     ];
-    let qr0 = new_qregister(qbits);
+    let qr0 = new_qregister(qbits0);
     println!("\nFirst {:?}", qr0);
     for i in 0..100 {
-        println!("First QuantumRegister Measurement # {}: {}", i+1, measure_register(&qr0));
+        println!("First QuantumRegister Measurement # {}: {}", i+1, measure_qregister(&qr0));
     }
+    /*
+    let cmp5 = Complex64::new(1.0 / f64::sqrt(6.0), 0.0);
+    let cmp6 = Complex64::new(0.0, -1.0 / f64::sqrt(6.0));
+    let cmp7 = Complex64::new(-1.0 / f64::sqrt(6.0), 0.0);
+    let qbits1: Vec<Qubit> = vec![
+        Qubit {c0: cmp5, c1: cmp6},
+        Qubit {c0: cmp6, c1: cmp7},
+        Qubit {c0: cmp7, c1: cmp5}
+    ];
+    let qr1 = new_qregister(qbits1);
+    println!("\nSecond {:?}", qr1);
+    for i in 0..100 {
+        println!("Second QuantumRegister Measurement # {}: {}", i+1, measure_qregister(&qr1));
+    }
+    */
 }

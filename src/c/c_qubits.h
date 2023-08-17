@@ -105,7 +105,7 @@ float genRandom() {
     return (float)rand() / RAND_MAX;
 }
 
-int measure(Qubit q) {
+int measureQubit(Qubit q) {
     if (q.C0.real == 1 && q.C0.imag == 0 && q.C1.real == 0 && q.C1.imag == 0) {
         return 0;
     } else if (q.C0.real == 0 && q.C0.imag == 0 && q.C1.real == 1 && q.C1.imag == 0) {

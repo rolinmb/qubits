@@ -19,7 +19,7 @@ int main() {
     qubitToString(q);
     printf("\n\nRNG Result: %f\n", genRandom());
     for (size_t i = 0; i < 10; i++) {
-        printf("\nSingleton Qubit Measurement %d: %d", i+1, measure(q));
+        printf("\nSingleton Qubit Measurement %d: %d", i+1, measureQubit(q));
     }
     float* coords = bloch_coordinates(q);
     printf("\n\nBloch Coordinates of Qubit: [");

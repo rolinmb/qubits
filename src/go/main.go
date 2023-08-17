@@ -33,7 +33,7 @@ func getObservationInt() int {
     return rand.Intn(math.MaxInt32)
 }
 
-func measure(q *Qubit) int {
+func measureQubit(q *Qubit) int {
     if real(q.C0) == 1 && imag(q.C0) == 0 && real(q.C1) == 0 && imag(q.C1) == 0 {
         return 0
     } else if real(q.C0) == 0 && imag(q.C0) == 0 && real(q.C1) == 1 && imag(q.C1) == 0 {
@@ -133,7 +133,7 @@ func main() {
     }
     qubitToString(q0)
     for i := 0; i < 100; i++ {
-        fmt.Printf("Singleton Qubit Measurement %d: %d\n", i+1, measure(q0))
+        fmt.Printf("Singleton Qubit Measurement %d: %d\n", i+1, measureQubit(q0))
     }
     c2 := complex(-0.5, 0.0)
     c3 := complex(0.0, 0.5)
