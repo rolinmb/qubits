@@ -1,7 +1,6 @@
 use num_complex::Complex64;
 use std::thread;
-use std::time::Duration;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use rand::{Rng, SeedableRng};
 
 fn get_random_float() -> f64 {
@@ -11,6 +10,15 @@ fn get_random_float() -> f64 {
     let seed = current_time as u64;
     let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
     return rng.gen();
+}
+
+fn get_random_int() -> i32 {
+    let nanoseconds = Duration::new(0, 1);
+    thread::sleep(nanoseconds);
+    let current_time = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards").as_nanos();
+    let seed = current_time as u64;
+    let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
+    return rng.gen_range(0..=i32::MAX);
 }
 
 #[derive(Debug)]
@@ -82,6 +90,38 @@ fn new_qregister(qbits: Vec<Qubit>) -> QuantumRegister {
     }
 }
 
+fn measure_register(qr: &QuantumRegister) -> i32 {
+    let mut equal_probs = true;
+    let mut probs = vec![0 as f64, qr.qubits.len() as f64];
+    let mut prob_sum: f64 = 0.0;
+    for i in 0..qr.qubits.len() {
+        probs[i] = qr.qubits[i].c0.norm()*qr.qubits[i].c0.norm() + qr.qubits[i].c1.norm()*qr.qubits[i].c1.norm();
+        prob_sum += probs[i];
+    }
+    if f64::round(prob_sum) as i32 != 1 {
+        return -1;
+    }
+    for i in 1..qr.qubits.len() {
+        if probs[i] != probs[0] {
+            equal_probs = false;
+            break;
+        }
+    }
+    if equal_probs {
+        return get_random_int() % 2_i32.pow(qr.qubits.len() as u32);
+    } else {
+        let observation = f64::round(prob_sum) * get_random_float();
+        let mut accum_prob: f64 = 0.0;
+        for i in 0..qr.qubits.len() {
+            accum_prob += probs[i];
+            if observation <= accum_prob {
+                return i as i32;
+            }
+        }
+    }
+    return -1;
+}
+
 fn main() {
     let cmp0 = Complex64::new(1.0, 0.0);
     let cmp1 = Complex64::new(0.0, 1.0);
@@ -103,12 +143,15 @@ fn main() {
     q0 = singleton_qubit(cmp3, cmp4); // 50/50 Chance to be 0 or 1
     println!("\nFifth {:?}", q0);
     for i in 0..10 {
-        println!("Fifth Qubit Measurement {}: {}", i+1, measure_qubit(&q0));
+        println!("Fifth Qubit Measurement # {}: {}", i+1, measure_qubit(&q0));
     }
     let qbits: Vec<Qubit> = vec![
         q0,
         Qubit {c0: cmp4, c1: cmp3}
     ];
-    let qr = new_qregister(qbits);
-    println!("\n{:?}", qr)
+    let qr0 = new_qregister(qbits);
+    println!("\nFirst {:?}", qr0);
+    for i in 0..100 {
+        println!("First QuantumRegister Measurement # {}: {}", i+1, measure_register(&qr0));
+    }
 }
