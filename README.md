@@ -1,1 +1,3 @@
-Implementing classes (or structures) for Qubits and Quantum Registers in various programming languages
+Classical simulation of a Qubit and QuantumRegister in various programming languages.
+
+References: [https://en.wikipedia.org/wiki/Qubit](https://en.wikipedia.org/wiki/Qubit)

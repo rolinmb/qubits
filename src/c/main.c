@@ -14,12 +14,12 @@ int main() {
     sum = cmplx_mult(z, w);
     printf("\nZ x W = {%f + %fi}", sum.real, sum.imag);
     sum = cmplx_divi(z, w);
-    printf("\nZ / W = {%f + %fi}\n", sum.real, sum.imag);
+    printf("\nZ / W = {%f + %fi}", sum.real, sum.imag);
     Qubit q = singletonQubit(z, w);
     qubitToString(q);
-    printf("\nRNG Result: %f", genRandom());
+    printf("\n\nRNG Result: %f\n", genRandom());
     for (int i = 0; i < 10; i++) {
-        printf("\nQubit Measurement %d: %d", i+1, measure(q));
+        printf("\nSingleton Qubit Measurement %d: %d", i+1, measure(q));
     }
     float* coords = bloch_coordinates(q);
     printf("\n\nBloch Coordinates of Qubit: [");
@@ -29,14 +29,31 @@ int main() {
             printf(", ");
         }
     }
-    printf("]\n");
+    printf("]");
     free(coords);
-    Complex b = {-1.f/2.f, 0};
-    Complex c = {0, 1.f/2.f};
+    Complex b = {-0.5f, 0.f};
+    Complex c = {0.f, 0.5f};
     Qubit s = {b, c};
     Qubit t = {c, b};
-    Qubit* registerQubits[] = {&s, &t};
-    QuantumRegister qRegister = newQuantumRegister(registerQubits, 2);
-    qRegisterToString(qRegister);
+    Qubit* registerQubits0[2] = {&s, &t};
+    QuantumRegister qRegister0 = newQuantumRegister(registerQubits0, 2);
+    qRegisterToString(qRegister0);
+    for (int i = 0; i < 100; i++) {
+        printf("\nQuantum Register Measurement %d: %d", i+1, measureRegister(qRegister0));
+    }
+    free(qRegister0.qubits);
+    Complex d = {-1.f/sqrtf(6), 0.f};
+    Complex e = {0.f, 1.f/sqrtf(6)};
+    Complex f = {1.f/sqrtf(6), 0.f};
+    Qubit u = {d, e};
+    Qubit v = {e, f};
+    Qubit y = {d, f};
+    Qubit* registerQubits1[3] = {&u, &v, &y};
+    QuantumRegister qRegister1 = newQuantumRegister(registerQubits1, 3);
+    qRegisterToString(qRegister1);
+    for (int i = 0; i < 100; i++) {
+        printf("\nQuantum Register Measurement %d: %d", i+1, measureRegister(qRegister1));
+    }
+    free(qRegister1.qubits);
     return 0;
 }

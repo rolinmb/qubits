@@ -89,7 +89,7 @@ Qubit singletonQubit(Complex c0, Complex c1) {
     return qbit;
 }
 
-float genRandom() {
+void seedRandom() {
     LARGE_INTEGER performanceCount;
     FILETIME systemTime;
     ULONGLONG combinedTime;
@@ -98,6 +98,10 @@ float genRandom() {
     combinedTime = ((ULONGLONG)systemTime.dwHighDateTime << 32) + systemTime.dwLowDateTime + performanceCount.QuadPart;
     srand((unsigned int)combinedTime);
     Sleep(1);
+}
+
+float genRandom() {
+    seedRandom();
     return (float)rand() / RAND_MAX;
 }
 
@@ -159,9 +163,9 @@ float* bloch_coordinates(Qubit q) {
 
 void qubitToString(Qubit q) {
     if (q.C0.real == 0 && q.C0.imag == 0 && q.C1.real == 0 && q.C1.imag == 0)
-        printf("\n[Invalid Qubit: {%f + %fi}, {%f + %fi}]", q.C0.real, q.C0.imag, q.C1.real, q.C1.imag);
+        printf("\n\n[Invalid Qubit: {%f + %fi}, {%f + %fi}]", q.C0.real, q.C0.imag, q.C1.real, q.C1.imag);
     else {
-        printf("\n[{%f + %fi}, {%f + %fi}]", q.C0.real, q.C0.imag, q.C1.real, q.C1.imag);
+        printf("\n\n[{%f + %fi}, {%f + %fi}]", q.C0.real, q.C0.imag, q.C1.real, q.C1.imag);
     }
 }
 
@@ -196,10 +200,51 @@ QuantumRegister newQuantumRegister(Qubit** qubitArr, size_t arrSize) {
 	return qRegister;
 }
 
-void qRegisterToString(QuantumRegister r) {
-    printf("\n~\n");
-    for (size_t i = 0; i < r.n_qubits; i++) {
-        printf("[{%f + %fi}, {%f + %fi}]\n", r.qubits[i].C0.real, r.qubits[i].C0.imag, r.qubits[i].C1.real, r.qubits[i].C1.imag);
+int measureRegister(QuantumRegister qr) {
+    bool equalProbs = true;
+    float* probs = (float *)malloc(qr.n_qubits * sizeof(float));
+    if (probs == NULL) {
+        perror("Memory allocation failed in measureRegister");
+        exit(EXIT_FAILURE);
+    }
+    float probSum = 0.f;
+    for (size_t i = 0; i < qr.n_qubits; i++) {
+        probs[i] = cmplx_abs(qr.qubits[i].C0)*cmplx_abs(qr.qubits[i].C0) + cmplx_abs(qr.qubits[i].C1)*cmplx_abs(qr.qubits[i].C1);
+        probSum += probs[i];
+    }
+    if (round(probSum) != 1) { // Re-validate; A QuantumRegister has a probability sum == 1
+        perror("Cannot measure an invalid QuantumRegister (probabilities sum != 1)");
+        exit(EXIT_FAILURE);
+    }
+    for (size_t i = 1; i < qr.n_qubits; i++) { // Check for equal probability states
+        if (probs[i] != probs[0]) {
+            equalProbs = false;
+            break;
+        }
+    }
+    if (equalProbs) {
+        free(probs);
+        seedRandom();
+        return rand() % (int)pow(2, qr.n_qubits);
+    } else {
+        float observation = round(probSum) * genRandom();
+        float accumProb = 0.f;
+        for (int i = 0; i < qr.n_qubits; i++) {
+            accumProb += probs[i];
+            if (observation <= accumProb) {
+                free(probs);
+                return i;
+            }
+        }
+    }
+    free(probs);
+    return -1;
+}
+
+void qRegisterToString(QuantumRegister qr) {
+    printf("\n\n~\n");
+    for (size_t i = 0; i < qr.n_qubits; i++) {
+        printf("[{%f + %fi}, {%f + %fi}]\n", qr.qubits[i].C0.real, qr.qubits[i].C0.imag, qr.qubits[i].C1.real, qr.qubits[i].C1.imag);
     }
     printf("~\n");
 }
