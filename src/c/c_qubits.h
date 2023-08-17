@@ -225,7 +225,7 @@ int measureRegister(QuantumRegister qr) {
     if (equalProbs) {
         free(probs);
         seedRandom();
-        return rand() % (int)pow(2, qr.n_qubits);
+        return rand() % (int)pow(2, qr.n_qubits); // 2^n_qubits possible states
     } else {
         float observation = round(probSum) * genRandom();
         float accumProb = 0.f;
