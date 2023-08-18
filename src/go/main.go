@@ -124,9 +124,9 @@ func registerToString(qr *QuantumRegister) {
 }
 
 func main() {
-    c0 := complex(0.5, 0.0)
-    c1 := complex(0.0, 0.5)
-    q0, err := singletonQubit(c0, c1)
+    c0 := complex(math.Sqrt(2.0), 0.0)
+    c1 := complex(0.0, math.Sqrt(2.0))
+    q0, err := singletonQubit(c0, c1) // 50% chance to collapse to 0 or 1
     if err != nil {
         fmt.Println("Error: ", err)
         return
@@ -140,7 +140,7 @@ func main() {
     q1 := Qubit{C0: c2, C1: c3}
     q2 := Qubit{C0: c3, C1: c2}
     qbits0 := []Qubit{q1, q2}
-    qr0, err := newRegister(qbits0)
+    qr0, err := newRegister(qbits0) // 25% chance to collapse to 00, 01, 10, 11
     if err != nil {
         fmt.Println("Error: ", err)
         return
@@ -148,26 +148,6 @@ func main() {
     registerToString(qr0)
     for i := 0; i < 400; i++ {
         regiMeasurement, err := measureRegister(qr0)
-        if err != nil {
-            break
-        }
-        fmt.Printf("Quantum Register Measurement %d: %d\n", i+1, regiMeasurement)
-    }
-    c4 := complex(1/math.Sqrt(float64(6)), 0)
-    c5 := complex(0, -1/math.Sqrt(float64(6)))
-    c6 := complex(-1/math.Sqrt(float64(6)), 0)
-    q3 := Qubit{C0: c4, C1: c5}
-    q4 := Qubit{C0: c5, C1: c6}
-    q5 := Qubit{C0: c4, C1: c6}
-    qbits1 := []Qubit{q3, q4, q5}
-    qr1, err := newRegister(qbits1)
-    if err != nil {
-        fmt.Println("Error: ", err)
-        return
-    }
-    registerToString(qr1)
-    for i := 0; i < 800; i++ {
-        regiMeasurement, err := measureRegister(qr1)
         if err != nil {
             break
         }

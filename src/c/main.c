@@ -42,18 +42,5 @@ int main() {
         printf("\nQuantum Register Measurement %d: %d", i+1, measureRegister(qRegister0));
     }
     free(qRegister0.qubits);
-    Complex d = {-1.f/sqrtf(6), 0.f};
-    Complex e = {0.f, 1.f/sqrtf(6)};
-    Complex f = {1.f/sqrtf(6), 0.f};
-    Qubit u = {d, e};
-    Qubit v = {e, f};
-    Qubit y = {d, f};
-    Qubit* registerQubits1[3] = {&u, &v, &y};
-    QuantumRegister qRegister1 = newQuantumRegister(registerQubits1, 3);
-    qRegisterToString(qRegister1);
-    for (int i = 0; i < 100; i++) {
-        printf("\nQuantum Register Measurement %d: %d", i+1, measureRegister(qRegister1));
-    }
-    free(qRegister1.qubits);
     return 0;
 }

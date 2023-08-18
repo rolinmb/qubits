@@ -51,10 +51,3 @@ if __name__ == "__main__":
     print(register)
     for i in range(0, 100):
         print(f"Quantum Register Measurement {i}: {register.measure()}")
-    register = qRegister([
-        qubit(complex(-1/np.sqrt(6), 0), complex(0, 1/np.sqrt(6))),
-        qubit(complex(0, -1/np.sqrt(6)), complex(1/np.sqrt(6), 0)),
-        qubit(complex(1/np.sqrt(6), 0), complex(-1/np.sqrt(6), 0))])
-    print(register)
-    for i in range(0, 100):
-        print(f"Quantum Register Measurement {i}: {register.measure()}")

@@ -131,40 +131,31 @@ fn main() {
     q0 = singleton_qubit(cmp1, cmp0); // Invalid
     println!("\nSecond {:?}", q0);
     println!("Second Qubit Measurement: {}", measure_qubit(&q0));
-    let cmp2 = Complex64::new(0.0, 0.0); // Always 0
+    let cmp2 = Complex64::new(0.0, 0.0); // Always collapses to 0
     q0 = singleton_qubit(cmp0, cmp2);
     println!("\nThird {:?}", q0);
     println!("Third Qubit Measurement: {}", measure_qubit(&q0));
-    q0 = singleton_qubit(cmp2, cmp0); // Always 1
+    q0 = singleton_qubit(cmp2, cmp0); // Always collapses to 1
     println!("\nFourth {:?}", q0);
     println!("Fourth Qbuit Measurement: {}", measure_qubit(&q0));
-    let cmp3 = Complex64::new(0.5, 0.0);
-    let cmp4 = Complex64::new(0.0, -0.5);
-    q0 = singleton_qubit(cmp3, cmp4); // 50/50 Chance to be 0 or 1
+    let cmp3 = Complex64::new(1.0 / f64::sqrt(2.0), 0.0);
+    let cmp4 = Complex64::new(0.0, 1.0 / sqrt(2.0));
+    q0 = singleton_qubit(cmp3, cmp4); // 50/50 Chance to collapse to 0 or 1
     println!("\nFifth {:?}", q0);
-    for i in 0..10 {
+    for i in 0..100 {
         println!("Fifth Qubit Measurement # {}: {}", i+1, measure_qubit(&q0));
     }
-    let qbits0: Vec<Qubit> = vec![
-        q0,
-        Qubit {c0: cmp4, c1: cmp3}
+    let cmp5 = Complex64::new(0.5, 0.0);
+    let cmp6 = Complex64::new(0.0, 0.5);
+    let cmp7 = Complex64::new(-0.5, 0.0);
+    let cmp8 = Complex64::new(0.0, -0.5);
+    let qbits0: Vec<Qubit> = vec![ 
+        Qubit {c0: cmp5, c1: cmp6},                         
+        Qubit {c0: cmp7, c1: cmp8}
     ];
     let qr0 = new_qregister(qbits0);
     println!("\nFirst {:?}", qr0);
     for i in 0..400 {
         println!("First QuantumRegister Measurement # {}: {}", i+1, measure_qregister(&qr0));
-    }
-    let cmp5 = Complex64::new(1.0 / f64::sqrt(6.0), 0.0);
-    let cmp6 = Complex64::new(0.0, -1.0 / f64::sqrt(6.0));
-    let cmp7 = Complex64::new(-1.0 / f64::sqrt(6.0), 0.0);
-    let qbits1: Vec<Qubit> = vec![
-        Qubit {c0: cmp5, c1: cmp6},
-        Qubit {c0: cmp6, c1: cmp7},
-        Qubit {c0: cmp7, c1: cmp5}
-    ];
-    let qr1 = new_qregister(qbits1);
-    println!("\nSecond {:?}", qr1);
-    for i in 0..800 {
-        println!("Second QuantumRegister Measurement # {}: {}", i+1, measure_qregister(&qr1));
     }
 }
