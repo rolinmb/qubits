@@ -17,8 +17,7 @@ int main() {
     printf("\nZ / W = {%f + %fi}", sum.real, sum.imag);
     Qubit q = singletonQubit(z, w);
     qubitToString(q);
-    printf("\n\nRNG Result: %f\n", genRandom());
-    for (size_t i = 0; i < 10; i++) {
+    for (size_t i = 0; i < 10; i++) { // 50% chance to collapse to 0 or 1
         printf("\nSingleton Qubit Measurement %d: %d", i+1, measureQubit(q));
     }
     float* coords = bloch_coordinates(q);
@@ -38,7 +37,7 @@ int main() {
     Qubit* registerQubits0[2] = {&s, &t};
     QuantumRegister qRegister0 = newQuantumRegister(registerQubits0, 2);
     qRegisterToString(qRegister0);
-    for (size_t i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) { // 25% chance to collapse to 00, 01, 10, 11
         printf("\nQuantum Register Measurement %d: %d", i+1, measureRegister(qRegister0));
     }
     free(qRegister0.qubits);

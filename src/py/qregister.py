@@ -45,7 +45,7 @@ class qRegister:
         return representation+"~\n"
 
 if __name__ == "__main__":
-    register = qRegister([
+    register = qRegister([ # 25% chance to collapse to 00, 01, 10, 11
         qubit(0.5+0j, 0-0.5j),
         qubit(-0.5+0j, 0+0.5j)])
     print(register)

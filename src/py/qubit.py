@@ -109,5 +109,5 @@ def singleton_qubit(complex0, complex1):
 if __name__ == "__main__":
     q0 = singleton_qubit(complex(-1/np.sqrt(2), 0), complex(0, 1/np.sqrt(2)))
     print(q0)
-    for i in range(0, 10):
+    for i in range(0, 10): # 50% chance to collapse to 0 or 1
         print(f"Qubit Measurement {i}: {q0.measure()}")

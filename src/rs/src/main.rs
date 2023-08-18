@@ -139,8 +139,8 @@ fn main() {
     println!("\nFourth {:?}", q0);
     println!("Fourth Qbuit Measurement: {}", measure_qubit(&q0));
     let cmp3 = Complex64::new(1.0 / f64::sqrt(2.0), 0.0);
-    let cmp4 = Complex64::new(0.0, 1.0 / sqrt(2.0));
-    q0 = singleton_qubit(cmp3, cmp4); // 50/50 Chance to collapse to 0 or 1
+    let cmp4 = Complex64::new(0.0, 1.0 / f64::sqrt(2.0));
+    q0 = singleton_qubit(cmp3, cmp4); // 50% chance to collapse to 0 or 1
     println!("\nFifth {:?}", q0);
     for i in 0..100 {
         println!("Fifth Qubit Measurement # {}: {}", i+1, measure_qubit(&q0));
@@ -149,7 +149,7 @@ fn main() {
     let cmp6 = Complex64::new(0.0, 0.5);
     let cmp7 = Complex64::new(-0.5, 0.0);
     let cmp8 = Complex64::new(0.0, -0.5);
-    let qbits0: Vec<Qubit> = vec![ 
+    let qbits0: Vec<Qubit> = vec![ // 25% chance to collapse to 00, 01, 10, 11
         Qubit {c0: cmp5, c1: cmp6},                         
         Qubit {c0: cmp7, c1: cmp8}
     ];
