@@ -137,7 +137,7 @@ fn main() {
     println!("Third Qubit Measurement: {}", measure_qubit(&q0));
     q0 = singleton_qubit(cmp2, cmp0); // Always collapses to 1
     println!("\nFourth {:?}", q0);
-    println!("Fourth Qbuit Measurement: {}", measure_qubit(&q0));
+    println!("Fourth Qubit Measurement: {}", measure_qubit(&q0));
     let cmp3 = Complex64::new(1.0 / f64::sqrt(2.0), 0.0);
     let cmp4 = Complex64::new(0.0, 1.0 / f64::sqrt(2.0));
     q0 = singleton_qubit(cmp3, cmp4); // 50% chance to collapse to 0 or 1
@@ -155,7 +155,7 @@ fn main() {
     ];
     let qr0 = new_qregister(qbits0);
     println!("\nFirst {:?}", qr0);
-    for i in 0..400 {
+    for i in 0..200 {
         println!("First QuantumRegister Measurement # {}: {}", i+1, measure_qregister(&qr0));
     }
 }
