@@ -2,4 +2,5 @@
 /src/cpp/main.exe
 /src/rs/cargo.lock
 /src/rs/target
+/src/py/__pycache__
 .vscode

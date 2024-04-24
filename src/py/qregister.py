@@ -1,5 +1,5 @@
 from qubit import *
-
+"""
 def validateRegister(qbits):
     sum = 0
     for q in qbits:
@@ -43,7 +43,25 @@ class qRegister:
         for i in range(0, self.n_qubits):
             representation += f"([{round(self.qubits[i].c0.real, 5)} + {round(self.qubits[i].c0.imag, 5)}i]; [{round(self.qubits[i].c1.real, 5)} + {round(self.qubits[i].c1.imag, 5)}i])\n"
         return representation+"~\n"
+"""
+class qRegister:
+    def __init__(self, qubits):
+        self.qubits = qubits
+        self.n_qubits = len(qubits)
 
+    def measure(self):
+        collapsed_state = ""
+        for qubit in self.qubits:
+            outcome = qubit.measure()
+            collapsed_state += str(outcome)
+        return collapsed_state
+
+    def __repr__(self):
+        representation = ""
+        for qubit in self.qubits:
+            representation += f"{qubit}\n"
+        return representation
+    
 if __name__ == "__main__":
     register = qRegister([ # 25% chance to collapse to 00, 01, 10, 11
         qubit(0.5+0j, 0-0.5j),

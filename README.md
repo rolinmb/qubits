@@ -2,5 +2,4 @@ Classical simulations of a Qubit and QuantumRegister in various programming lang
 
 References: [https://en.wikipedia.org/wiki/Qubit](https://en.wikipedia.org/wiki/Qubit)
 
-TODO: Quantum Registers do not collapse as desired, need to better my understanding
-    of what actually to do to simulate Quantum Register measurements
+TODO: recently updated src/py/qregister.py with help of ChatGPT; need to update other language implementations accordingly

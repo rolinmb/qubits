@@ -57,7 +57,6 @@ class qubit:
 
         r_alpha = math.sqrt((self.c1.real**2) + (self.c0.imag**2))
         # r_beta = math.sqrt((self.c1.real**2) + (self.c1.imag**2))
-
         phi = beta_theta - alpha_theta
         theta = 2 * np.arccos(r_alpha)
         return [1, theta, phi] # X, Y, Z
@@ -93,7 +92,6 @@ class qubit:
 
         r_alpha = math.sqrt((self.c1.real**2) + (self.c0.imag**2))
         # r_beta = math.sqrt((self.c1.real**2) + (self.c1.imag**2))
-
         phi = beta_theta - alpha_theta
         theta = 2 * np.arccos(r_alpha)
         return [math.sin(theta)*math.cos(phi), math.sin(theta)*math.sin(phi), math.cos(theta)] # [X, Y, Z]
