@@ -1,6 +1,15 @@
 /src/c/main.exe
+/src/c/main.o
+/src/c/main
 /src/cpp/main.exe
+/src/cpp/main.o
+/src/cpp/main
+/src/csharp/obj
+/src/csharp/bin
+/src/go/main.exe
+/src/go/main.o
+/src/go/main
+/src/py/__pycache__
 /src/rs/cargo.lock
 /src/rs/target
-/src/py/__pycache__
 .vscode
