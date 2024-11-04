@@ -1,46 +1,46 @@
 class Complex { // Made with the help of ChatGPT
     constructor(real, imag) {
-      this.real = real;
-      this.imag = imag;
+        this.real = real;
+        this.imag = imag;
     }
 
     add(other) {
-      return new Complex(this.real + other.real, this.imag + other.imag);
+        return new Complex(this.real + other.real, this.imag + other.imag);
     }
 
     subtract(other) {
-      return new Complex(this.real - other.real, this.imag - other.imag);
+        return new Complex(this.real - other.real, this.imag - other.imag);
     }
   
     multiply(other) {
-      const realPart = this.real * other.real - this.imag * other.imag;
-      const imagPart = this.real * other.imag + this.imag * other.real;
-      return new Complex(realPart, imagPart);
+        const realPart = this.real * other.real - this.imag * other.imag;
+        const imagPart = this.real * other.imag + this.imag * other.real;
+        return new Complex(realPart, imagPart);
     }
 
     divide(other) {
-      const denom = other.real * other.real + other.imag * other.imag;
-      if (denom === 0) throw new Error("Division by zero");
-      const realPart = (this.real * other.real + this.imag * other.imag) / denom;
-      const imagPart = (this.imag * other.real - this.real * other.imag) / denom;
-      return new Complex(realPart, imagPart);
+        const denom = other.real * other.real + other.imag * other.imag;
+        if (denom === 0) throw new Error("Division by zero");
+        const realPart = (this.real * other.real + this.imag * other.imag) / denom;
+        const imagPart = (this.imag * other.real - this.real * other.imag) / denom;
+        return new Complex(realPart, imagPart);
     }
 
     magnitude() {
-      return Math.sqrt(this.real * this.real + this.imag * this.imag);
+        return Math.sqrt(this.real * this.real + this.imag * this.imag);
     }
 
     argument() {
-      return Math.atan2(this.imag, this.real);
+        return Math.atan2(this.imag, this.real);
     }
 
     conjugate() {
-      return new Complex(this.real, -this.imag);
+        return new Complex(this.real, -this.imag);
     }
 
     toString() {
-      const sign = this.imag >= 0 ? "+" : "-";
-      return `${this.real} ${sign} ${Math.abs(this.imag)}i`;
+        const sign = this.imag >= 0 ? "+" : "-";
+        return `${this.real} ${sign} ${Math.abs(this.imag)}i`;
     }
 }
 
@@ -62,9 +62,10 @@ class Qubit {
     }
 
     validate() {
-      const magSum = this.c0.magnitude() ** 2 + this.c1.magnitude() ** 2;
-      if (Math.abs(magSum - 1) > TOLERANCE) {
-          throw new Error("Invalid qubit state: the sum of squares of the magnitudes of c0 and c1 must be approximately 1.");
+        const magSum = this.c0.magnitude() ** 2 + this.c1.magnitude() ** 2;
+        if (Math.abs(magSum - 1) > TOLERANCE) {
+            throw new Error("Invalid qubit state: the sum of squares of the magnitudes of c0 and c1 must be approximately 1.");
+        }
     }
 
     measure() {
@@ -87,4 +88,5 @@ class Qubit {
             }
         }
     }
+  }
 }
